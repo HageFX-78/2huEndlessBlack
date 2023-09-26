@@ -11,6 +11,8 @@ public class Enemy2Behaviour : MonoBehaviour
     private char pattern;
     [SerializeField] private float startAngle, incrementAngle;
 
+    private bool firstEnabled = false;
+
     void Start()
     {
         mpool = BulletPoolGeneral.poolInstance;
@@ -20,13 +22,19 @@ public class Enemy2Behaviour : MonoBehaviour
     void Update()
     {
 
-            transform.position += new Vector3(0, -moveSpeed * Time.deltaTime, 0);
-        
-        
+        transform.position += new Vector3(0, -moveSpeed * Time.deltaTime, 0);
+
+
     }
     void OnEnable()
     {
+        if(firstEnabled == false)
+        {
+            firstEnabled = true;
+            return;
+        }
         Invoke("shootfirst", 0.5f);
+        
     }
     void OnBecameInvisible()
     {
@@ -58,16 +66,16 @@ public class Enemy2Behaviour : MonoBehaviour
             rb.AddForce(new Vector2(xdir, ydir) * bulletSpeed, ForceMode2D.Impulse);
             bpool.Enqueue(thisBullet);
 
-            if(startAngle>=0)
+            if (startAngle >= 0)
             {
                 fireDirection = false;
 
             }
-            else if(startAngle <= -180)
+            else if (startAngle <= -180)
             {
                 fireDirection = true;
             }
-            startAngle += fireDirection ?incrementAngle:-incrementAngle;
+            startAngle += fireDirection ? incrementAngle : -incrementAngle;
             yield return new WaitForSeconds(fireRate);
         }
     }

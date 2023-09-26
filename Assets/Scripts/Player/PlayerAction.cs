@@ -30,7 +30,7 @@ public class PlayerAction : MonoBehaviour
     public Transform LbulletFPOS;//Fire position Left
     public Transform RbulletFPOS;//Fire position Right
     public int fireDelayTurn_b2;
-    
+
     [SerializeField] private float baseAngle;
     [SerializeField] private float angleDifference;//Only affects bullet type 1
     [SerializeField] private float subAngleDifference;//Angle difference
@@ -54,17 +54,17 @@ public class PlayerAction : MonoBehaviour
     private List<Transform> enemylist;
 
     public Animator anim;
-    
+
     //Coroutine 
     IEnumerator cr;
 
     void Start()
-    { 
+    {
 
-        bulletLevel = 1 ;
-        
+        bulletLevel = 1;
+
         score = 0;
-        
+
         bulletGauge = 0;
         bgauge.rectTransform.sizeDelta = new Vector2(0, 32);
         immuneState = false;
@@ -74,7 +74,7 @@ public class PlayerAction : MonoBehaviour
         cameraEff = ShakeEffect.caminstance;
         cr = shoot();
     }
-    
+
     void Update()
     {
         if (bulletLevel == 9)
@@ -85,14 +85,14 @@ public class PlayerAction : MonoBehaviour
         {
             bulletLVL.text = bulletLevel.ToString();
         }
-        
+
         scoreTXT.text = score.ToString();
         scoreGO.text = "Score: " + score.ToString();
-        hpTXT.text = "x"+HP.ToString();
+        hpTXT.text = "x" + HP.ToString();
         int localGauge = bulletGauge;
-        if (localGauge > 100) { localGauge -= 100*(bulletLevel-1); }
+        if (localGauge > 100) { localGauge -= 100 * (bulletLevel - 1); }
         bgauge.rectTransform.sizeDelta = new Vector2(localGauge * 256 / 100, 32);
-        
+
 
 
 
@@ -114,18 +114,18 @@ public class PlayerAction : MonoBehaviour
             transform.position += new Vector3(0, -speed * Time.deltaTime, 0);
         }
 
-        
+
         //shoot code for now
         if (Input.GetKeyDown(KeyCode.Mouse0))
-        {            
-            StartCoroutine(cr);  
+        {
+            StartCoroutine(cr);
         }
         else if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             StopCoroutine(cr);
         }
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             speed /= 2;
         }
@@ -144,14 +144,14 @@ public class PlayerAction : MonoBehaviour
 
     public void damageSelf()
     {
-        if(!immuneState)
+        if (!immuneState)
         {
             FindObjectOfType<AudioManager>().plyAudio("plyerDeath");
             cameraEff.shakeScreen(0.2f);
             HP--;
-            
+
             Debug.Log(HP);
-            if(HP<=0)
+            if (HP <= 0)
             {
                 Time.timeScale = 0f;
                 gameOverMenu.SetActive(true);
@@ -179,9 +179,9 @@ public class PlayerAction : MonoBehaviour
                 anim.SetBool("isImmune", true);
                 Invoke("removeImmune", 5f);
             }
-            
+
         }
-        
+
     }
     void removeImmune()
     {
@@ -195,7 +195,7 @@ public class PlayerAction : MonoBehaviour
     }
     public void addBulletGauge(int amt)
     {
-        if (bulletLevel<9)
+        if (bulletLevel < 9)
         {
             bulletGauge += amt;
             upgradeBullet();
@@ -205,26 +205,26 @@ public class PlayerAction : MonoBehaviour
             bulletGauge = 900;
             bgauge.rectTransform.sizeDelta = new Vector2(256, 32);
         }
-              
+
     }
 
     private void upgradeBullet()
     {
         if (bulletGauge >= 100 * bulletLevel)
         {
-            bulletLevel++;              
+            bulletLevel++;
         }
     }
 
     public void winCondition()
     {
-        winScore.text = score + "\n" + "Boss Defeated: +" + 10000 + "\n HP Bonus: x"+ HP + "\n Total: " + (score+10000)*5;
+        winScore.text = score + "\n" + "Boss Defeated: +" + 10000 + "\n HP Bonus: x" + HP + "\n Total: " + (score + 10000) * 5;
         winMenu.SetActive(true);
         Time.timeScale = 0f;
     }
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Enemy")||collision.CompareTag("Boss"))
+        if (collision.CompareTag("Enemy") || collision.CompareTag("Boss"))
         {
 
             damageSelf();
@@ -233,7 +233,7 @@ public class PlayerAction : MonoBehaviour
     }
     Transform getClosestEnemy(List<Transform> enemies)
     {
-        
+
         Transform closest = null;
         float closestDistanceSqr = Mathf.Infinity;
         Vector3 currentPosition = transform.position;
@@ -261,7 +261,7 @@ public class PlayerAction : MonoBehaviour
             bool skipThisTurn = tempSkip > 0 ? true : false;
             float offsetAngle = angleDifference / 2;
             int offsetCount;
-            if(bulletLevel%2==0)
+            if (bulletLevel % 2 == 0)
             {
                 offsetCount = (bulletLevel - 2) / 2;
             }
@@ -269,16 +269,16 @@ public class PlayerAction : MonoBehaviour
             {
                 offsetCount = (bulletLevel - 1) / 2;
             }
-            float baseTemp = baseAngle - (offsetAngle* offsetCount);
+            float baseTemp = baseAngle - (offsetAngle * offsetCount);
 
             //For secondary/directed bullet
             float tempAngle = subAngleDifference + 90;
-            float tempAngle2 = tempAngle - (subAngleDifference*2);
+            float tempAngle2 = tempAngle - (subAngleDifference * 2);
             b2switch = false;
 
-            for (int x=0; x<bulletLevel; x++)
+            for (int x = 0; x < bulletLevel; x++)
             {
-                
+
                 GameObject thisBullet;
                 GameObject thisBullet2;
                 if ((x + 1) % 2 != 0)
@@ -289,7 +289,7 @@ public class PlayerAction : MonoBehaviour
 
                     thisBullet = bulletPool.Dequeue();
                     thisBullet.transform.position = bulletFPOS.transform.position;
-                    
+
                     thisBullet.SetActive(true);
                     Rigidbody2D rb = thisBullet.GetComponent<Rigidbody2D>();
 
@@ -325,9 +325,9 @@ public class PlayerAction : MonoBehaviour
                             b2switch = true;
                         }
 
-                        if(enemylist.Count !=0)
+                        if (enemylist.Count != 0)
                         {
-                            
+
                             rb.AddForce((getClosestEnemy(enemylist).position - transform.position).normalized * bulletSpeed2, ForceMode2D.Impulse);
                             rb2.AddForce((getClosestEnemy(enemylist).position - transform.position).normalized * bulletSpeed2, ForceMode2D.Impulse);
                         }
@@ -340,18 +340,18 @@ public class PlayerAction : MonoBehaviour
                             float ydir2 = Mathf.Sin(tempAngle2 * Mathf.PI / 180);
                             rb2.AddForce(new Vector2(xdir2, ydir2) * bulletSpeed2, ForceMode2D.Impulse);
                         }
-                        
+
                         bulletPool2.Enqueue(thisBullet);
                         bulletPool2.Enqueue(thisBullet2);
                     }
-                }         
+                }
             }
-            
+
             if (tempSkip > 0)
             {
                 tempSkip--;
             }
-            else if(fireDelayTurn_b2>0)
+            else if (fireDelayTurn_b2 > 0)
             {
                 tempSkip = fireDelayTurn_b2;
             }

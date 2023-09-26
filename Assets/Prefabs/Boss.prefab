@@ -48,13 +48,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   playerRef: {fileID: 0}
-  health: 1
+  health: 150
   bulletSpeed: 30
   bulletSpeed2: 24
   fireAngle: 0
-  fireRate: 0.8
-  fireRate2: 0.4
-  bulletSplit: 36
+  fireRate: 2
+  fireRate2: 1
+  bulletSplit: 20
   startAngle: 0
   incrementAngle: 15
   incrementP2b: 0

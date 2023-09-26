@@ -12,8 +12,10 @@ public class HomingBehaviour : MonoBehaviour
     IEnumerator rt;
     void Start()
     {
-
-        target = GameObject.FindGameObjectWithTag("Enemy").transform;
+        target = GameObject.FindGameObjectWithTag("Boss").transform;
+        if(target == null)
+            target = GameObject.FindGameObjectWithTag("Enemy").transform;
+        
         rb = GetComponent<Rigidbody2D>();
         //rt = rotate();    
     }

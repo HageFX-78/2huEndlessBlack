@@ -11,6 +11,7 @@ public class EnemyBehavior : MonoBehaviour
     public float moveSpeed, bulletSpeed, fireRate, shotDelay, moveOffset;
     private char pattern;
 
+    private bool firstEnabled = false;
     IEnumerator sht;
 
     void Start()
@@ -22,6 +23,11 @@ public class EnemyBehavior : MonoBehaviour
     }
     void OnEnable()
     {
+        if(firstEnabled == false)
+        {
+            firstEnabled = true;
+            return;
+        }
         Invoke("shootfirst", 0.3f);
         moveOffset = Random.Range(-10, 10);
     }

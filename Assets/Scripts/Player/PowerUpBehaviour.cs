@@ -17,7 +17,7 @@ public class PowerUpBehaviour : MonoBehaviour
         {
             FindObjectOfType<AudioManager>().plyAudio("item");
             gameObject.SetActive(false);
-            collision.GetComponent<PlayerAction>().addBulletGauge(10);
+            collision.GetComponent<PlayerAction>().addBulletGauge(25);
         }
 
     }
